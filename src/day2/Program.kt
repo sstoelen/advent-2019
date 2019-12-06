@@ -1,9 +1,9 @@
-package day1
+package day2
 
 import java.io.File
 
 fun main() {
-    val prg =  Program2()
+    val prg = Program2()
     println(prg.func("1,0,0,0,99"))
     println(prg.func("2,3,0,3,99"))
     println(prg.func("2,4,4,5,99,0"))
@@ -13,7 +13,7 @@ fun main() {
 
 class Program2 {
     fun run(): List<Int> {
-        val lst = File("C:\\Users\\sstoelen\\vdabdev\\projects\\advent-seba\\src\\day1\\input2.txt").readText()
+        val lst = File("C:\\Users\\sstoelen\\vdabdev\\projects\\advent-seba\\src\\day2\\input.txt").readText()
             .split(",")
             .map { it.toInt() }
             .toMutableList()
