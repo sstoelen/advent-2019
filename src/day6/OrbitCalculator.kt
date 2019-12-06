@@ -48,34 +48,3 @@ class OrbitMap {
         }
     }
 }
-
-/*
-class OrbitNode(var name: String) {
-    var parents: MutableList<OrbitNode> = mutableListOf()
-    var children: MutableList<OrbitNode> = mutableListOf()
-
-    fun addChild(orbitNode:OrbitNode) {
-        orbitNode.parents = this
-        children.add(orbitNode)
-    }
-
-    fun calculateOrbits() : Int {
-        return if (children.isEmpty()) {
-            0
-        } else {
-            var orbits = children.size
-            children.forEach{
-                orbits += it.calculateOrbits()
-            }
-            orbits
-        }
-    }
-
-    override fun toString(): String {
-        var s = name
-        if (!children.isEmpty()) {
-            s += " {" + children.map { it.toString() } + " }"
-        }
-        return s
-    }
-}*/
