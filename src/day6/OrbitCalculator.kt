@@ -9,42 +9,53 @@ fun main() {
 
 class OrbitMap {
 
-    val orbitmap: MutableMap<String, OrbitNode> = mutableMapOf()
+    val orbitmap: MutableMap<String, MutableSet<String>> = mutableMapOf()
 
     fun getTotalNumberOfOrbits(inputList: List<String>) : Int {
         buildOrbitMap(inputList)
+        println(orbitmap)
         var totalOrbits = 0
-        orbitmap.values.forEach { totalOrbits += it.calculateOrbits() }
+        orbitmap.keys.forEach { totalOrbits += calculateAllOrbits(it) }
         return totalOrbits
+    }
+
+    private fun calculateAllOrbits(planetName: String) : Int {
+        return if (orbitmap[planetName] == null) {
+            0
+        } else {
+            var orbits = orbitmap[planetName]!!.size
+            orbitmap[planetName]!!.forEach {
+                orbits += calculateAllOrbits(it)
+            }
+            orbits
+        }
+
+
     }
 
     private fun buildOrbitMap(inputList: List<String>) {
         inputList.forEach{
             val splitString = it.split(')')
-            val parentName = splitString[0]
-            val childName = splitString[1]
-            val parentNode = orbitmap[parentName]
-            if (parentNode != null) {
-                val childNode = OrbitNode(childName)
-                parentNode.addChild(childNode)
-                orbitmap[childName] = childNode
+            val centerPlanet = splitString[0]
+            val planetThatOrbits = splitString[1]
+            val setOfPlanetsThatOrbits = orbitmap[centerPlanet]
+            if (setOfPlanetsThatOrbits == null) {
+                val newSetOfPlanetsThatOrbit = mutableSetOf(planetThatOrbits)
+                orbitmap[centerPlanet] = newSetOfPlanetsThatOrbit
             } else {
-                val newParentNode = OrbitNode(parentName)
-                val childNode = OrbitNode(childName)
-                newParentNode.addChild(childNode)
-                orbitmap[parentName] = newParentNode
-                orbitmap[childName] = childNode
+                setOfPlanetsThatOrbits.add(planetThatOrbits)
             }
         }
     }
 }
 
+/*
 class OrbitNode(var name: String) {
-    var parent:OrbitNode? = null
+    var parents: MutableList<OrbitNode> = mutableListOf()
     var children: MutableList<OrbitNode> = mutableListOf()
 
     fun addChild(orbitNode:OrbitNode) {
-        orbitNode.parent = this
+        orbitNode.parents = this
         children.add(orbitNode)
     }
 
@@ -67,4 +78,4 @@ class OrbitNode(var name: String) {
         }
         return s
     }
-}
+}*/
