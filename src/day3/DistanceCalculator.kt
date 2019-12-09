@@ -1,16 +1,35 @@
 package day3
 
+import java.io.File
+import kotlin.math.abs
+
 fun main() {
-    DistanceCalculator().calculateDistanceForWires()
+    val wires = File("src/day3/testinput.txt").readLines().map { it.split(',') }
+
+    val distance = DistanceCalculator().calculateDistanceForWires(wires[0], wires[1])
+    println(distance)
+
 }
 
 class DistanceCalculator {
 
-    fun calculateDistanceForWires() {
+    fun calculateDistanceForWires(wire1 : List<String>, wire2: List<String>): Int {
         val grid = Grid()
-        grid.addLine(1, "D2")
-        grid.addLine(1, "D3")
-        println(grid.map)
+        wire1.forEach { grid.addLine(1, it) }
+        wire2.forEach { grid.addLine(2, it) }
+
+        val crossings = grid.getCrossings()
+        return getDistanceOfClosesCrossing(crossings)
+
+    }
+
+    private fun getDistanceOfClosesCrossing(crossings: Collection<Position>): Int {
+        return crossings.map { position -> getMHDistanceToCenter(position) }.min() ?: 0
+
+    }
+
+    private fun getMHDistanceToCenter(position: Position): Int {
+        return abs(position.x) + abs(position.y)
     }
 
 }
@@ -30,6 +49,12 @@ class Grid {
          'D' -> goDown(wire, amount)
      }
 
+    }
+
+    fun getCrossings(): Collection<Position> {
+        return map.keys
+            .filter { pos -> map[pos]!!.size > 1 }
+            .filter { pos -> pos != Position(0,0) }
     }
 
     private fun goRight(wire: Int, amount: Int) {
